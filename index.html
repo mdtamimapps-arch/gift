@@ -1,0 +1,174 @@
+<!DOCTYPE html><html lang="bn"><head><meta charset="utf-8"><title>GIFT BOX</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&family=Orbitron:wght@800&display=swap" rel="stylesheet">
+<style>
+:root{--g:#ffd76a;--p:#7c3aed;--k:#ff4fa3;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;min-height:100vh;font-family:'Hind Siliguri',system-ui,sans-serif;color:#fff;background:radial-gradient(circle at 50% 0,#3b1a7a,#150a33 60%,#080418);overflow-x:hidden}
+#bg{position:fixed;inset:0;width:100%;height:100%;z-index:0}
+.s{position:relative;z-index:1;display:none;min-height:100vh;flex-direction:column;align-items:center;justify-content:center;padding:20px;text-align:center;gap:16px}
+.s.on{display:flex;animation:in .6s ease}
+@keyframes in{from{opacity:0;transform:translateY(20px) scale(.97)}}
+h1{font-family:Orbitron,sans-serif;font-size:clamp(38px,12vw,72px);margin:0;letter-spacing:4px;background:linear-gradient(90deg,#ffd76a,#ff4fa3,#a78bfa,#ffd76a);background-size:300%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:sh 4s linear infinite;filter:drop-shadow(0 0 18px #ff4fa388)}
+@keyframes sh{to{background-position:300%}}
+.cur{display:inline-block;width:4px;height:.9em;background:var(--g);margin-left:6px;animation:bl .7s infinite;vertical-align:middle}
+@keyframes bl{50%{opacity:0}}
+p{margin:0;opacity:.85}
+.btn{border:0;cursor:pointer;font:700 18px 'Hind Siliguri',sans-serif;color:#2a1250;padding:14px 34px;border-radius:50px;background:linear-gradient(135deg,#ffe28a,#ffb347);box-shadow:0 8px 28px #ffb34766,inset 0 -3px 0 #0002;transition:.2s}
+.btn:active{transform:scale(.95)}
+.btn.o{background:#ffffff14;color:#fff;box-shadow:none;border:1px solid #fff4;backdrop-filter:blur(8px)}
+.card{background:#ffffff12;border:1px solid #ffffff2e;backdrop-filter:blur(14px);border-radius:26px;padding:22px;box-shadow:0 20px 60px #0008}
+.wheelwrap{position:relative;width:min(86vw,340px);aspect-ratio:1}
+#wheel{width:100%;height:100%;filter:drop-shadow(0 0 30px #a78bfa88)}
+.ptr{position:absolute;top:-14px;left:50%;transform:translateX(-50%);width:0;height:0;border:14px solid transparent;border-top:30px solid var(--g);filter:drop-shadow(0 4px 6px #0008);z-index:2}
+.hub{position:absolute;inset:50% auto auto 50%;width:62px;height:62px;margin:-31px;border-radius:50%;background:radial-gradient(#fff,var(--g));display:grid;place-items:center;font-size:26px;box-shadow:0 0 20px #ffd76a}
+#res{font-size:22px;font-weight:700;min-height:34px}
+.stage{width:min(94vw,520px);height:min(62vh,460px);position:relative;border-radius:28px;overflow:hidden;touch-action:none;background:radial-gradient(circle,#ffffff14,#ffffff05);border:1px solid #fff3}
+#game{width:100%;height:100%;display:block}
+.chip{padding:6px 16px;border-radius:30px;background:#ffffff1a;border:1px solid #fff3;font-weight:600}
+.gb{position:relative;width:200px;height:230px;margin-top:20px}
+.gbody{position:absolute;bottom:0;left:10px;right:10px;height:110px;border-radius:8px 8px 14px 14px;background:linear-gradient(135deg,#ff4fa3,#b3166b);box-shadow:0 20px 40px #0009;z-index:3}
+.gbody:after{content:'';position:absolute;left:50%;margin-left:-14px;width:28px;top:0;bottom:0;background:linear-gradient(90deg,#ffd76a,#fff1b0,#ffd76a)}
+.glid{position:absolute;bottom:100px;left:0;right:0;height:34px;border-radius:8px;background:linear-gradient(135deg,#ff6fb5,#c31c76);z-index:4;transform-origin:left bottom;transition:transform 1s cubic-bezier(.3,1.6,.4,1)}
+.glid:after{content:'';position:absolute;left:50%;margin-left:-14px;width:28px;top:0;bottom:0;background:linear-gradient(90deg,#ffd76a,#fff1b0,#ffd76a)}
+.gb.open .glid{transform:translate(-70px,-60px) rotate(-38deg)}
+.gb .jar{position:absolute;left:50%;bottom:60px;width:130px;margin-left:-65px;border-radius:16px;background:#fff;padding:6px;z-index:2;transform:translateY(70px) scale(.4);opacity:0;transition:1.2s .5s cubic-bezier(.2,1.4,.4,1);box-shadow:0 0 50px #ffd76a}
+.gb.open .jar{transform:translateY(-120px) scale(1.25);opacity:1}
+.jar img{width:100%;display:block;border-radius:10px}
+.gb.shake{animation:shk .5s infinite}
+@keyframes shk{25%{transform:rotate(-4deg)}75%{transform:rotate(4deg)}}
+.cong{font-size:clamp(22px,6vw,32px);font-weight:700;color:var(--g);text-shadow:0 0 20px #ffd76a88}
+.row{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+#fx{position:fixed;inset:0;pointer-events:none;z-index:9;width:100%;height:100%}
+</style></head><body>
+<canvas id="bg"></canvas><canvas id="fx"></canvas>
+
+<section class="s on" id="s1">
+ <h1><span id="ty"></span><span class="cur"></span></h1>
+ <p id="sub" style="opacity:0;transition:1s">🎁 আপনার জন্য রয়েছে একটি বিশেষ সারপ্রাইজ 🎁</p>
+ <button class="btn" id="go" style="opacity:0;transition:1s">শুরু করুন ✨</button>
+</section>
+
+<section class="s" id="s2">
+ <h1 style="font-size:34px">LUCKY SPIN</h1>
+ <div class="wheelwrap"><div class="ptr"></div><canvas id="wheel" width="680" height="680"></canvas><div class="hub">🎁</div></div>
+ <div id="res"></div>
+ <button class="btn" id="spin">স্পিন করুন 🎡</button>
+ <button class="btn" id="again" style="display:none">আবার ট্রাই করুন 🔁</button>
+</section>
+
+<section class="s" id="s3">
+ <h1 style="font-size:30px">GIFT BOX</h1>
+ <p>ঘুরতে থাকা বক্স ধরার চেষ্টা করুন! 👆</p>
+ <div class="stage"><canvas id="game"></canvas></div>
+ <div class="chip">চেষ্টা: <b id="tr">0</b></div>
+</section>
+
+<section class="s" id="s4">
+ <div class="cong">Congratulations ☕ দিয়া!</div>
+ <div class="gb" id="gb"><div class="jar"><img id="jimg" alt="Horlicks"></div><div class="glid"></div><div class="gbody"></div></div>
+ <div class="cong" id="c2" style="opacity:0;transition:1s;margin-top:50px">🎉 এই হলো আপনার উপহার 🎉</div>
+ <p id="ask" style="opacity:0;transition:1s">আপনি কি উপহারটি নিতে চান নাকি প্রত্যাখ্যান করতে চান?</p>
+ <div class="row" id="btns" style="opacity:0;transition:1s"><button class="btn" id="acc">উপহার নিন 🎁</button><button class="btn o" id="rej">প্রত্যাখ্যান ✖</button></div>
+</section>
+
+<section class="s" id="s5">
+ <div class="card"><div class="cong">ধন্যবাদ! 💖</div><p style="margin:8px 0 14px">আপনার উপহার ডাউনলোড হয়েছে।</p>
+ <p style="font-weight:700;font-size:19px;margin-bottom:14px">কেমন লাগলো আপনার গিফট?</p>
+ <div class="row"><button class="btn" id="rev">⭐ রিভিউ দিন (WhatsApp)</button><button class="btn o" id="dl2">আবার ডাউনলোড</button></div></div>
+</section>
+
+<script>
+const IMG="PASTE_IMAGE_HERE", WA_NUMBER="8801799584300";
+const $=id=>document.getElementById(id);
+$('jimg').src=IMG;
+const show=n=>{document.querySelectorAll('.s').forEach(s=>s.classList.remove('on'));$('s'+n).classList.add('on');scrollTo(0,0)};
+const DPR=Math.min(devicePixelRatio||1,2);
+const COLS=[['#ff4fa3','#b3166b'],['#a78bfa','#5b21b6'],['#ffd76a','#d97706'],['#34d399','#047857'],['#60a5fa','#1d4ed8']];
+function box(c,x,y,s,col,rot=0,a=1){c.save();c.translate(x,y);c.rotate(rot);c.globalAlpha=a;
+ const w=s,h=s*.78;let g=c.createLinearGradient(-w/2,0,w/2,h);g.addColorStop(0,col[0]);g.addColorStop(1,col[1]);
+ c.shadowColor=col[0]+'99';c.shadowBlur=s*.3;c.fillStyle=g;c.beginPath();c.roundRect(-w/2,-h/4,w,h*.8,s*.07);c.fill();c.shadowBlur=0;
+ c.fillStyle=g;c.beginPath();c.roundRect(-w*.56,-h/2,w*1.12,h*.3,s*.07);c.fill();
+ c.fillStyle='#fff3';c.fillRect(-w/2,-h/4,w*.12,h*.8);
+ let r=c.createLinearGradient(-w*.1,0,w*.1,0);r.addColorStop(0,'#ffd76a');r.addColorStop(.5,'#fff3b0');r.addColorStop(1,'#ffd76a');
+ c.fillStyle=r;c.fillRect(-w*.1,-h/2,w*.2,h*1.05);
+ c.strokeStyle='#ffd76a';c.lineWidth=s*.07;c.beginPath();c.ellipse(-w*.2,-h*.62,w*.2,h*.14,-.5,0,7);c.ellipse(w*.2,-h*.62,w*.2,h*.14,.5,0,7);c.stroke();
+ c.restore()}
+/* background simulator: falling gift boxes */
+const bg=$('bg'),bc=bg.getContext('2d');let BW,BH,fl=[];
+function rs(){BW=bg.width=innerWidth*DPR;BH=bg.height=innerHeight*DPR}rs();addEventListener('resize',rs);
+for(let i=0;i<26;i++)fl.push({x:Math.random(),y:Math.random(),s:(14+Math.random()*30)*DPR,v:.0005+Math.random()*.0012,r:Math.random()*6,w:(Math.random()-.5)*.02,c:COLS[i%5],ph:Math.random()*6});
+const stars=[...Array(70)].map(()=>[Math.random(),Math.random(),Math.random()*2+.5,Math.random()*6]);
+(function L(t){bc.clearRect(0,0,BW,BH);
+ for(const s of stars){bc.fillStyle=`rgba(255,255,255,${.3+.5*Math.sin(t/600+s[3])})`;bc.beginPath();bc.arc(s[0]*BW,s[1]*BH,s[2]*DPR,0,7);bc.fill()}
+ for(const f of fl){f.y+=f.v;f.r+=f.w;if(f.y>1.1){f.y=-.1;f.x=Math.random()}
+  box(bc,(f.x+Math.sin(t/1500+f.ph)*.03)*BW,f.y*BH,f.s,f.c,f.r,.55)}
+ requestAnimationFrame(L)})(0);
+/* confetti */
+const fx=$('fx'),fc=fx.getContext('2d');let P=[];
+function fs(){fx.width=innerWidth;fx.height=innerHeight}fs();addEventListener('resize',fs);
+function burst(n=160){for(let i=0;i<n;i++)P.push({x:innerWidth/2,y:innerHeight*.45,vx:(Math.random()-.5)*16,vy:-Math.random()*16-2,c:`hsl(${Math.random()*360},90%,65%)`,s:5+Math.random()*7,r:Math.random()*6,l:1})}
+(function F(){fc.clearRect(0,0,fx.width,fx.height);P=P.filter(p=>p.l>0);for(const p of P){p.x+=p.vx;p.y+=p.vy;p.vy+=.35;p.vx*=.99;p.r+=.2;p.l-=.008;fc.save();fc.globalAlpha=Math.max(p.l,0);fc.translate(p.x,p.y);fc.rotate(p.r);fc.fillStyle=p.c;fc.fillRect(-p.s/2,-p.s/4,p.s,p.s/2);fc.restore()}requestAnimationFrame(F)})();
+/* intro */
+(function(){const t='GIFT BOX';let i=0;const iv=setInterval(()=>{$('ty').textContent=t.slice(0,++i);if(i>=t.length){clearInterval(iv);$('sub').style.opacity=1;setTimeout(()=>$('go').style.opacity=1,600)}},180)})();
+$('go').onclick=()=>{show(2);drawW()};
+/* wheel */
+const SEG=[['📱','iPhone','#7c3aed'],['💵','টাকা','#059669'],['০','০','#334155'],['💻','Laptop','#2563eb'],['🥇','Gold','#d97706'],['০','০','#334155'],['📱','iPhone','#db2777'],['০','০','#334155']];
+const N=SEG.length,SA=Math.PI*2/N;let rot=0,spinning=false;
+function drawW(){const c=$('wheel').getContext('2d'),W=680,R=W/2-14;c.clearRect(0,0,W,W);c.save();c.translate(W/2,W/2);
+ c.beginPath();c.arc(0,0,R+10,0,7);c.fillStyle='#ffd76a';c.fill();
+ for(let i=0;i<N;i++){const a=rot+i*SA;c.beginPath();c.moveTo(0,0);c.arc(0,0,R,a,a+SA);c.closePath();
+  const g=c.createRadialGradient(0,0,40,0,0,R);g.addColorStop(0,SEG[i][2]);g.addColorStop(1,SEG[i][2]+'bb');c.fillStyle=g;c.fill();c.strokeStyle='#ffffff55';c.lineWidth=3;c.stroke();
+  c.save();c.rotate(a+SA/2);c.textAlign='center';c.fillStyle='#fff';
+  if(SEG[i][0]==='০'){c.font='700 96px Orbitron,sans-serif';c.fillText('0',R*.62,34)}
+  else{c.font='56px serif';c.fillText(SEG[i][0],R*.7,-6);c.font='700 30px Hind Siliguri,sans-serif';c.fillText(SEG[i][1],R*.7,38)}c.restore()}
+ for(let i=0;i<N;i++){const a=rot+i*SA;c.beginPath();c.arc(Math.cos(a)*(R+2),Math.sin(a)*(R+2),7,0,7);c.fillStyle='#fff';c.fill()}
+ c.restore()}
+$('spin').onclick=()=>{if(spinning)return;spinning=true;$('res').textContent='';$('spin').style.display='none';
+ const zeros=[2,5,7],k=zeros[Math.random()*3|0];
+ const target=-Math.PI/2-(k+.5)*SA+(Math.random()-.5)*SA*.6;
+ const end=target+Math.PI*2*(6+(Math.random()*3|0));const st=rot,t0=performance.now(),D=5200;
+ (function A(t){const p=Math.min((t-t0)/D,1),e=1-Math.pow(1-p,4);rot=st+(end-st)*e;drawW();
+  if(p<1)requestAnimationFrame(A);else{spinning=false;$('res').innerHTML='😢 আপনি পেয়েছেন <b style="color:#ffd76a">0</b> — কিছুই পাননি!';$('again').style.display='';}})(t0)};
+$('again').onclick=()=>{$('again').style.display='none';$('spin').style.display='';startGame()};
+/* circle game */
+const gc=$('game'),g=gc.getContext('2d');let GW,GH,bx=[],tries=0,need=4,ptr=null,scat=0,ang=0,phase='play',run=false;
+function gr(){const r=gc.getBoundingClientRect();GW=gc.width=r.width*DPR;GH=gc.height=r.height*DPR}
+function startGame(){show(3);gr();tries=0;need=4+(Math.random()*2|0);$('tr').textContent=0;phase='play';scat=0;
+ bx=[...Array(9)].map((_,i)=>({x:GW/2,y:GH/2,i,c:COLS[i%5],tx:0,ty:0}));if(!run){run=true;requestAnimationFrame(gl)}}
+const pp=e=>{const r=gc.getBoundingClientRect();return{x:(e.clientX-r.left)*DPR,y:(e.clientY-r.top)*DPR}};
+gc.addEventListener('pointerdown',e=>{if(phase!=='play')return;ptr=pp(e);tries++;$('tr').textContent=tries;scat=performance.now()+900;
+ for(const b of bx){b.tx=GW*.1+Math.random()*GW*.8;b.ty=GH*.1+Math.random()*GH*.8}
+ if(tries>=need){phase='end';setTimeout(finish,900)}});
+gc.addEventListener('pointermove',e=>{ptr=pp(e)});
+gc.addEventListener('pointerleave',()=>ptr=null);
+function gl(t){if(!run)return;if(!$('s3').classList.contains('on')){run=false;return}
+ g.clearRect(0,0,GW,GH);ang+=.012;const cx=GW/2,cy=GH/2,R=Math.min(GW,GH)*.34,S=Math.min(GW,GH)*.13;
+ g.save();g.strokeStyle='#ffffff22';g.setLineDash([8*DPR,12*DPR]);g.beginPath();g.arc(cx,cy,R,0,7);g.stroke();g.restore();
+ for(const b of bx){let hx=cx+Math.cos(ang+b.i*Math.PI*2/bx.length)*R,hy=cy+Math.sin(ang+b.i*Math.PI*2/bx.length)*R,tx=hx,ty=hy;
+  if(phase==='end'){tx=cx;ty=cy}
+  else if(t<scat){tx=b.tx;ty=b.ty}
+  else if(ptr){const dx=b.x-ptr.x,dy=b.y-ptr.y,d=Math.hypot(dx,dy)||1;if(d<S*3){tx=Math.min(Math.max(b.x+dx/d*S*4,S),GW-S);ty=Math.min(Math.max(b.y+dy/d*S*4,S),GH-S)}}
+  b.x+=(tx-b.x)*.14;b.y+=(ty-b.y)*.14;box(g,b.x,b.y,S,b.c,Math.sin(t/400+b.i)*.2)}
+ requestAnimationFrame(gl)}
+function finish(){show(4);const b=$('gb');b.className='gb shake';['c2','ask','btns'].forEach(x=>$(x).style.opacity=0);
+ setTimeout(()=>{b.className='gb open';burst()},1400);setTimeout(()=>$('c2').style.opacity=1,2800);setTimeout(()=>{$('ask').style.opacity=1;$('btns').style.opacity=1;burst(80)},3600)}
+$('rej').onclick=startGame;
+/* download */
+function dl(){const W=900,H=1100,c=document.createElement('canvas');c.width=W;c.height=H;const x=c.getContext('2d');
+ const bgG=x.createRadialGradient(W/2,0,50,W/2,H/2,H);bgG.addColorStop(0,'#4c1d95');bgG.addColorStop(1,'#0b0420');x.fillStyle=bgG;x.fillRect(0,0,W,H);
+ for(let i=0;i<90;i++){x.fillStyle=`rgba(255,255,255,${Math.random()*.6})`;x.beginPath();x.arc(Math.random()*W,Math.random()*H,Math.random()*2.5,0,7);x.fill()}
+ x.textAlign='center';x.fillStyle='#ffd76a';x.font='800 64px Orbitron,sans-serif';x.fillText('GIFT BOX',W/2,110);
+ const im=new Image();im.onload=()=>{
+  box(x,W/2,760,520,COLS[0],0);
+  x.save();x.shadowColor='#ffd76a';x.shadowBlur=60;x.fillStyle='#fff';x.beginPath();x.roundRect(W/2-170,230,340,470,28);x.fill();x.restore();
+  x.drawImage(im,W/2-160,240,320,442);
+  x.fillStyle='#fff';x.font='700 54px Hind Siliguri,sans-serif';x.fillText('Congratulations ☕ দিয়া!',W/2,1000);
+  x.fillStyle='#ffd76a';x.font='600 36px Hind Siliguri,sans-serif';x.fillText('এই হলো আপনার উপহার 🎁',W/2,1056);
+  c.toBlob(b=>{const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='my-gift-box.png';a.click()})};im.src=IMG}
+$('acc').onclick=()=>{dl();burst(200);setTimeout(()=>show(5),900)};
+$('dl2').onclick=dl;
+$('rev').onclick=()=>{const m=encodeURIComponent('আমার গিফট বক্স অভিজ্ঞতা দারুণ ছিল! 🎁☕ রিভিউ: ');location.href='https://wa.me/'+WA_NUMBER+'?text='+m};
+addEventListener('resize',()=>{if($('s3').classList.contains('on'))gr()});
+</script></body></html>
